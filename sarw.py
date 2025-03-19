@@ -19,16 +19,22 @@ def generate_SARW(n):
     visited = set(coords)
     while len(coords) <= n:
         candidates = get_candidates(coords[-1], visited)
-        if len(candidates) == 0:
-            coords = [(0,0)]
-            visited = set(coords)
+        if len(candidates) == 0: # no possuble moves, keep still
+            coords += [coords[-1]]*(n+1-len(coords))
+            break
         coords.append(random.choice(candidates))
+        visited.add(coords[-1])
     return coords
 
 if __name__ == '__main__':
-    # test speed of implementation
+    # test speed of implementation and correctness of keeping still logic
+    still_example = None
     for i in range(100_000):
-        generate_SARW(50)
+        curr = generate_SARW(50)
+        if len(curr) != len(set(curr)):
+            still_example = curr
+    print(still_example)
+
     # smoke test for correctness
     print(generate_SARW(10))
 
